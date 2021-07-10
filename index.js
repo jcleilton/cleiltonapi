@@ -11,7 +11,7 @@ router.get('/',function(req,res){
   res.sendFile(path.join(__dirname+'/home.html'))
 })
 
-app.use('/', router)
+app.use('/users', router)
 
 app.listen(port, () => {
     console.log("listening on " + port)
