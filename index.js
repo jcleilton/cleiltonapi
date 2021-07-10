@@ -4,9 +4,14 @@ const app = express()
 
 let port = process.env.PORT || 3000
 
-app.get("/", (req, res) => {
-    res.send("hello world")
+const path = require('path');
+const router = express.Router();
+
+router.get('/',function(req,res){
+  res.sendFile(path.join(__dirname+'/home.html'))
 })
+
+app.use('/', router)
 
 app.listen(port, () => {
     console.log("listening on " + port)
