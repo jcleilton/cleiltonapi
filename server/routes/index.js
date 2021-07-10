@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 const db = require("../db")
 
-router.get('/', async (req, res, next) => {
+let myCall = router.get('/', async (req, res, next) => {
     try {
         let results = await db.allUsers()
         res.json(results)
@@ -11,3 +11,5 @@ router.get('/', async (req, res, next) => {
         res.sendStatus(500)
     }
 })
+
+module.exports = myCall
