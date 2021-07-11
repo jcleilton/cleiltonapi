@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
 
     let user = await createUser(req.body)
     if (!user) return response.sendStatus(500)
-    res.sendStatus(200).send({ id: user.id, name: user.name, lastname: user.lastname, email: user.email })
+    res.send({ id: user.id, name: user.name, lastname: user.lastname, email: user.email })
 })
 
 router.post('/login', async (req, res) => {
@@ -61,28 +61,28 @@ router.post('/login', async (req, res) => {
     const existenteUser = await User.findAll({ where: { email: req.body.email } })
     console.log('passando na linha 64')
 
-    if (!existenteUser) {
+    if (!existenteUser[0]) {
         return res.sendStatus(401).send(strings.loginError)
     } 
 
     console.log('passando na linha 67')
 
-    const validPass = await bcrypt.compare(req.body.password, existenteUser.password)
+    const validPass = await bcrypt.compare(req.body.password, existenteUser[0].password)
 
     if (!validPass) return res.sendStatus(401).send(strings.loginError)
 
     console.log('passando na linha 73')
 
-    const token = jwt.sign({ id: existenteUser.id}, process.env.TOKEN_SECRET)
+    const token = jwt.sign({ id: existenteUser[0].id}, process.env.TOKEN_SECRET)
 
     console.log('passando na linha 77')
 
     res.sendStatus(200).send({ 
         user: { 
-            id: existenteUser.id, 
-            name: existenteUser.name, 
-            lastname: existenteUser.lastname, 
-            email: existenteUser.email 
+            id: existenteUser[0].id, 
+            name: existenteUser[0].name, 
+            lastname: existenteUser[0].lastname, 
+            email: existenteUser[0].email 
         },
         token: token 
     })
