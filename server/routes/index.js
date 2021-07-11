@@ -42,8 +42,8 @@ router.post('/register', async (req, res) => {
 
     if (error) return res.sendStatus(400).send(error.details)
 
-    const existenteUser = await User.findOne({ where: { email: req.body.email } })
-    if (existenteUser) {
+    const existenteUser = await User.findAll({ where: { email: req.body.email } })
+    if (existenteUser[0]) {
         return res.sendStatus(400).send(strings.registrationError)
     } 
 
@@ -60,7 +60,7 @@ router.post('/login', async (req, res) => {
 
     const existenteUser = await User.findAll({ where: { email: req.body.email } })
     console.log('passando na linha 64')
-    
+
     if (!existenteUser) {
         return res.sendStatus(401).send(strings.loginError)
     } 
