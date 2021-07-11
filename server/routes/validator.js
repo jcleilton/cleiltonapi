@@ -8,7 +8,7 @@ const schemaForRegistration = {
 }
 
 const validateRegistration = (user) => {
-    let validation = Joi.validate(user, schemaForRegistration)
+    let validation = Joi.valid(user, schemaForRegistration)
     return validation
 }
 
@@ -18,7 +18,7 @@ const schemaForLogin = {
 }
 
 const validateLogin = (email, password) => {
-    let validation = Joi.validate({ email, password }, schemaForLogin)
+    let validation = Joi.valid({ email, password }, schemaForLogin)
     return validation
 }
 
