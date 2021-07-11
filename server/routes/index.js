@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
 
     const validPass = await bcrypt.compare(req.body.password, existentUser.password)
 
-    if (!validPass) return res.sendStatus(401).message(strings.loginError)
+    if (!validPass) return res.send(strings.loginError).sendStatus(401)
 
     console.log('passando na linha 73')
 
