@@ -22,7 +22,7 @@ connect()
 
 app.use(express.json())
 
-app.use('/users', router)
+app.use('/api', router)
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname+'/home.html'))
