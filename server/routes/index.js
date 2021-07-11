@@ -56,7 +56,7 @@ router.post('/login', async (req, res) => {
     let { error } = validateLogin(req.body)
     console.log(error)
 
-    if (error) return res.sendStatus(400).json(error.details)
+    if (error) return res.send({ message: error.details[0].message, errorCode: 401 })
 
     const existentsUser = await User.findAll({ where: { email: req.body.email } })
     console.log('passando na linha 64')
@@ -64,14 +64,14 @@ router.post('/login', async (req, res) => {
     const existentUser = existentsUser[0]
 
     if (!existentUser) {
-        return res.sendStatus(401).message(strings.loginError)
+        return res.send({ message: strings.loginError, errorCode: 401 })
     } 
 
     console.log('passando na linha 67')
 
     const validPass = await bcrypt.compare(req.body.password, existentUser.password)
 
-    if (!validPass) return res.send(strings.loginError).sendStatus(401)
+    if (!validPass) return res.send({ message: strings.loginError, errorCode: 401 })
 
     console.log('passando na linha 73')
 
