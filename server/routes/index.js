@@ -93,7 +93,7 @@ router.get('/testing/auth', validateToken, async (req, res) => {
 
     if (!user) return res.sendStatus(401).send(strings.unauthorizedError)
 
-    res.sendStatus(200).send({
+    res.send({
         user: {
             name: user.name,
             lastname: user.lastname,
