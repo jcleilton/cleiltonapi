@@ -58,8 +58,9 @@ router.post('/login', async (req, res) => {
 
     if (error) return res.sendStatus(400).send(error.details)
 
-
     const existenteUser = await User.findAll({ where: { email: req.body.email } })
+    console.log('passando na linha 64')
+    
     if (!existenteUser) {
         return res.sendStatus(401).send(strings.loginError)
     } 
