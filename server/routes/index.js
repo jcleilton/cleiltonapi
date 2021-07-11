@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
 
     console.log('passando na linha 77')
 
-    res.sendStatus(200).send({ 
+    res.send({ 
         user: { 
             id: existenteUser[0].id, 
             name: existenteUser[0].name, 
