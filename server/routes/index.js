@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
     })
 })
 
-router.get('/testing/auth', validateToken, (req, res) => {
+router.get('/testing/auth', validateToken, async (req, res) => {
     const user = await User.findByPk(req.user.id)
 
     if (!user) return res.sendStatus(401).send(strings.unauthorizedError)
