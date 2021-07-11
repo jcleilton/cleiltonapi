@@ -1,21 +1,5 @@
-const mysql = require("mysql")
 const env = require("./env")
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize(env.database, env.user, env.password, {dialect: env.dialect, host: env.host})
 
-let pool = mysql.createPool(env)
-
-let db = { }
-
-db.allUsers = () => {
-    return new Promise((resolve, reject) => {
-        pool.query('SELECT * FROM simpleusers', (err, results) => {
-            if (err) {
-                return reject(err)
-            }
-            return resolve({
-                users: results
-            })
-        })
-    })
-}
-
-module.exports = db
+module.exports = sequelize
