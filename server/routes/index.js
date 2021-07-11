@@ -54,21 +54,29 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     let { error } = validateLogin(req.body)
+    console.log(error)
 
     if (error) return res.sendStatus(400).send(error.details)
 
-    const existenteUser = await User.findOne({ where: { email: req.body.email } })
+
+    const existenteUser = await User.findAll({ where: { email: req.body.email } })
     if (!existenteUser) {
         return res.sendStatus(401).send(strings.loginError)
     } 
+
+    console.log('passando na linha 67')
 
     const validPass = await bcrypt.compare(req.body.password, existenteUser.password)
 
     if (!validPass) return res.sendStatus(401).send(strings.loginError)
 
+    console.log('passando na linha 73')
+
     const token = jwt.sign({ id: existenteUser.id}, process.env.TOKEN_SECRET)
 
-    res.header('auth-token', token).sendStatus(200).send({ 
+    console.log('passando na linha 77')
+
+    res.sendStatus(200).send({ 
         user: { 
             id: existenteUser.id, 
             name: existenteUser.name, 

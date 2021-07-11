@@ -24,7 +24,7 @@ app.use(express.json())
 
 app.use('/api/', router)
 
-app.get('/', (req, res) => {
+app.get('/wiki', (req, res) => {
     res.sendFile(path.join(__dirname+'/home.html'))
 })
 
