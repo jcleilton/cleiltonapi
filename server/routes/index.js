@@ -25,14 +25,14 @@ const createUser = async (user) => {
 
 const validateToken = async (req, res, next) => {
     const token = req.header('auth-token')
-    if (!token) return res.sendStatus(401).send(strings.unauthorizedError)
+    if (!token) return rres.send({ message: strings.unauthorizedError, errorCode: 401 })
 
     try {
         const verified = jwt.verify(token, process.env.TOKEN_SECRET)
         req.user = verified
         next()
     } catch (err) {
-        return res.sendStatus(401).send({ message: strings.unauthorizedError, error: err })
+        return res.send({ message: strings.unauthorizedError, errorCode: 401 })
     }
 }
 
@@ -40,15 +40,15 @@ const validateToken = async (req, res, next) => {
 router.post('/register', async (req, res) => {
     let { error } = validateRegistration(req.body)
 
-    if (error) return res.sendStatus(400).send(error.details)
+    if (error) return res.send({ message: error.details[0].message, errorCode: 400 })
 
     const existenteUser = await User.findAll({ where: { email: req.body.email } })
     if (existenteUser[0]) {
-        return res.sendStatus(400).send(strings.registrationError)
+        return res.send({ message: strings.registrationError, errorCode: 400 })
     } 
 
     let user = await createUser(req.body)
-    if (!user) return response.sendStatus(500)
+    if (!user) return res.send({ message: strings.registrationError, errorCode: 400 })
     res.send({ id: user.id, name: user.name, lastname: user.lastname, email: user.email })
 })
 
@@ -59,7 +59,6 @@ router.post('/login', async (req, res) => {
     if (error) return res.send({ message: error.details[0].message, errorCode: 401 })
 
     const existentsUser = await User.findAll({ where: { email: req.body.email } })
-    console.log('passando na linha 64')
 
     const existentUser = existentsUser[0]
 
@@ -67,17 +66,11 @@ router.post('/login', async (req, res) => {
         return res.send({ message: strings.loginError, errorCode: 401 })
     } 
 
-    console.log('passando na linha 67')
-
     const validPass = await bcrypt.compare(req.body.password, existentUser.password)
 
     if (!validPass) return res.send({ message: strings.loginError, errorCode: 401 })
 
-    console.log('passando na linha 73')
-
     const token = jwt.sign({ id: existentUser.id}, process.env.TOKEN_SECRET)
-
-    console.log('passando na linha 77')
 
     res.send({ 
         user: { 
@@ -93,7 +86,7 @@ router.post('/login', async (req, res) => {
 router.get('/testing/auth', validateToken, async (req, res) => {
     const user = await User.findByPk(req.user.id)
 
-    if (!user) return res.sendStatus(401).send(strings.unauthorizedError)
+    if (!user) return res.send({ message: strings.unauthorizedError, errorCode: 401 })
 
     res.send({
         user: {
